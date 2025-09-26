@@ -1,34 +1,38 @@
-#![allow(missing_docs)]
-use crate::{ config::{ SubXtResult, paseo } };
+use clap::Parser;
 
-mod remark;
+/// EduNews CLI - Subxt Multi-chain Demo
+/// 
+/// This CLI demonstrates how to use Subxt to interact with multiple Polkadot parachains:
+/// - AssetHub: NFT creation for ownership proof
+/// - EduChain: Article registration with signatures  
+/// - PeopleHub: Identity verification
+/// 
+/// Key learning points:
+/// - Multi-chain transaction coordination
+/// - Storage queries using generated metadata
+/// - Cryptographic signature handling
+/// - Cross-chain data linking
+
+mod commands;
+mod chains;
+mod types;
+mod utils;
+mod error;
 mod config;
 
+use commands::Commands;
+use error::EduNewsError;
+use types::Cli;
+
 #[tokio::main]
-async fn main() -> SubXtResult<()> {
-    use crate::remark::{ fetch_account_info, remark, create_signer };
-    use subxt_signer::sr25519::dev;
-
-    // Fetch account info for Alice
-    let alice = dev::alice();
-    let address = alice.public_key();
-    let info = fetch_account_info(address.into()).await?;
-    println!("Account info for ALICE: {:?}", info);
-
-    // Create a signer from a mnemonic (this is just Alice; replace with your own account's phrase!)
-    // !!! DANGER !!! Never put private keys or mnemonics in your code! This is only for demonstration purposes.
-    let mnemonic = "bottom drive obey lake curtain smoke basket hold race lonely fit walk//Alice";
-    let signer = create_signer(mnemonic)?;
-    println!("Signer created, waiting for events...");
-    // Send a remark and watch for the event
-    let events = remark(&signer, "Hello from remark.rs!").await?;
-    // Note: this just finds the first "remark_with_event" extrinsic
-    let remark_event = events.find_first::<paseo::system::events::Remarked>()?;
-    if let Some(event) = remark_event {
-        println!("Remark success: {event:?}");
-    } else {
-        println!("No Remarked event found.");
+async fn main() -> Result<(), EduNewsError> {
+    let cli = Cli::parse();
+    
+    match cli.command {
+        Commands::Register(args) => args.execute(cli.network, cli.json).await,
+        Commands::Verify(args) => args.execute(cli.network, cli.json).await,
+        Commands::List(args) => args.execute(cli.network, cli.json).await,
+        Commands::Identity(args) => args.execute(cli.network, cli.json).await,
+        Commands::Show(args) => args.execute(cli.network, cli.json).await,
     }
-
-    Ok(())
 }

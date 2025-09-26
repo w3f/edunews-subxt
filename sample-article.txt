@@ -1,0 +1,11 @@
+This is a sample news article about blockchain technology in education.
+
+Blockchain technology is revolutionizing how we think about educational credentials, student records, and academic verification. With immutable ledgers and decentralized networks, institutions can now provide tamper-proof certificates and transcripts.
+
+Key benefits include:
+- Immutable academic records
+- Global verification capabilities  
+- Reduced fraud and credential mills
+- Student ownership of their data
+
+This represents a fundamental shift in how educational achievements are recorded and verified globally.
