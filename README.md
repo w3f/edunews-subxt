@@ -1,5 +1,7 @@
 # EduNews CLI - Subxt Multi-Chain Demo
 
+![EduNews Stack](./md-img/edunews.png)
+
 A comprehensive Rust CLI application demonstrating **Subxt** usage for multi-chain Polkadot ecosystem interactions. This educational project shows how to build real-world blockchain applications using Subxt to coordinate transactions across multiple parachains.
 
 ## 🎯 Learning Objectives
